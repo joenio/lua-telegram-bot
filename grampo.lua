@@ -112,18 +112,35 @@ local token = "185470150:AAH99r53_7w0fccHZj7Ga1eO9rFE1nv5FKk"
 -- create and configure new bot with set token
 local bot, extension = require("lua-bot-api").configure(token)
 
+function message_to_me(msg)
+  exit_words = {'saia', 'vaza', 'partiu', 'sair', 'licença', 'xô'}
+  for index, word in pairs(exit_words) do
+    if string.match(msg.text, word) then
+      bot.sendMessage(msg.chat.id, "tchau querida(o)")
+      if not msg.chat.id == nil then
+        bot.leaveChat(msg.chat.id)
+      end
+    end
+  end
+end
+
 -- override onMessageReceive function so it does what we want
 extension.onTextReceive = function (msg)
 	print("New Message by " .. msg.from.first_name)
-  words = {'grampo', 'delacao', 'golpe', 'sarney', 'machado', 'impitima'}
-  for index, word in pairs(words) do
-    if (string.match(string.lower(msg.text), word)) then
-      math.randomseed(os.time())
-      random = math.random(table.maxn(transcripts))
-      name, say = next(transcripts[random])
-      bot.sendMessage(msg.chat.id, name .. ': ' .. say)
-      return
-	  end
+
+  if (string.match(msg.text, '^@' .. bot.username .. ' ')) then
+    message_to_me(msg)
+  else
+    words = {'grampo', 'delacao', 'golpe', 'sarney', 'machado', 'impitima'}
+    for index, word in pairs(words) do
+      if (string.match(string.lower(msg.text), word)) then
+        math.randomseed(os.time())
+        random = math.random(table.maxn(transcripts))
+        name, say = next(transcripts[random])
+        bot.sendMessage(msg.chat.id, name .. ': ' .. say)
+        return
+	    end
+    end
   end
 end
 
