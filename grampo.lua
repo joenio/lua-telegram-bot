@@ -1,7 +1,17 @@
 --[[
+
 grampo.lua
+
 http://telegram.me/grampobot
-# apt-get install lua5.2 lua-sec
+
+Dependencies:
+
+    $ sudo apt-get install lua5.2 lua-sec
+    $ git submodule init
+    $ git submodule update
+    $ wget http://regex.info/code/JSON.lua
+    $ lua grampo.lua
+
 ]]
 
 transcripts = {
@@ -106,8 +116,9 @@ transcripts = {
   {MACHADO = "Tomou conta do Brasil. O Supremo fez a pedido dele."},
 }
 
--- pass token as command line argument or insert it into code
-local token = "185470150:AAH99r53_7w0fccHZj7Ga1eO9rFE1nv5FKk"
+-- read token from grampo.token file
+local file = io.open("grampo.token", "r")
+local token = file:read()
 
 -- create and configure new bot with set token
 local bot, extension = require("lua-bot-api").configure(token)
