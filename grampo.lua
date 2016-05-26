@@ -117,9 +117,7 @@ function message_to_me(msg)
   for index, word in pairs(exit_words) do
     if string.match(msg.text, word) then
       bot.sendMessage(msg.chat.id, "tchau querida(o)")
-      if not msg.chat.id == nil then
-        bot.leaveChat(msg.chat.id)
-      end
+      bot.leaveChat(msg.chat.id)
     end
   end
 end
@@ -139,7 +137,7 @@ extension.onTextReceive = function (msg)
         name, say = next(transcripts[random])
         bot.sendMessage(msg.chat.id, name .. ': ' .. say)
         return
-	    end
+      end
     end
   end
 end
