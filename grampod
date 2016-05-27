@@ -1,0 +1,21 @@
+#!/bin/sh
+
+do_start() {
+  echo "starting grampo.lua"
+  lua grampo.lua &
+  echo $! > /tmp/grampod.pid
+}
+
+do_stop() {
+  echo "stopping grampo.lua"
+  PID=$(cat /tmp/grampod.pid)
+  kill $PID
+  rm -f /tmp/grampod.pid
+}
+
+do_restart() {
+  do_stop
+  do_start
+}
+
+do_$1

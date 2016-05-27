@@ -1,0 +1,15 @@
+#!/bin/sh
+
+do_start() {
+  ./grampod start
+  inotify-hookable --watch-files grampo.lua --watch-directories grampo-transcripts --on-modify-command './grampod restart' &
+  echo $! > /tmp/grampod-watch.pid
+}
+
+do_stop() {
+  PID=$(cat /tmp/grampod-watch.pid)
+  kill $PID
+  rm -f /tmp/grampod-watch.pid
+}
+
+do_$1
