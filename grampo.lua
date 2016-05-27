@@ -6,7 +6,7 @@ http://telegram.me/grampobot
 
 Dependencies:
 
-    $ sudo apt-get install lua5.2 lua-sec lua-filesystem
+    $ sudo apt-get install lua5.2 lua-sec lua-filesystem inotify-hookable
     $ git submodule init
     $ git submodule update
     $ wget http://regex.info/code/JSON.lua
@@ -57,11 +57,11 @@ end
 
 -- override onMessageReceive function so it does what we want
 extension.onTextReceive = function (msg)
-	print("New Message by " .. msg.from.first_name)
+  print("New Message by " .. msg.from.first_name)
   if (string.match(msg.text, '^@' .. bot.username .. ' ')) then
     message_to_me(msg)
   else
-    keywords = {'grampo', 'delacao', 'golpe', 'sarney', 'machado', 'impitima', 'juca'}
+    keywords = dofile('grampo-keywords.lua')
     for index, word in pairs(keywords) do
       if (string.match(string.lower(msg.text), word)) then
         math.randomseed(os.time())
