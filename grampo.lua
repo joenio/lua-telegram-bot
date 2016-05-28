@@ -27,7 +27,7 @@ end
 function load_transcripts(dir)
   local transcripts = {}
   for filename in lfs.dir(dir) do
-    if string.match(filename, ".lua$") then
+    if string.match(filename, ".lua$") and not string.match(filename, "melhores") then
       print("transcript file '" .. filename .. "' loaded")
       transcripts = join(transcripts, dofile(dir .. filename))
     end
@@ -37,6 +37,7 @@ end
 
 -- load all transcripts from grampo-transcripts/*.lua files
 local transcripts = load_transcripts('grampo-transcripts/')
+local melhores_transcripts = dofile('grampo-transcripts/melhores.lua')
 
 -- read bot token from grampo.token file
 local file = io.open("grampo.token", "r")
@@ -61,9 +62,16 @@ extension.onTextReceive = function (msg)
   if (string.match(msg.text, '^@' .. bot.username .. ' ')) then
     message_to_me(msg)
   else
+    melhores_keywords = {'aécio', 'aecio'}
+    for index, word in pairs(melhores_keywords) do
+      if string.match(string.lower(msg.text), word) then
+        bot.sendMessage(msg.chat.id, melhores_transcripts[1][1] .. ': ' .. melhores_transcripts[1][2])
+        return
+      end
+    end
     keywords = dofile('grampo-keywords.lua')
     for index, word in pairs(keywords) do
-      if (string.match(string.lower(msg.text), word)) then
+      if string.match(string.lower(msg.text), word) then
         math.randomseed(os.time())
         random = math.random(table.maxn(transcripts))
         bot.sendMessage(msg.chat.id, transcripts[random][1] .. ': ' .. transcripts[random][2])
