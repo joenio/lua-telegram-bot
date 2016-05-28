@@ -6,7 +6,7 @@ http://telegram.me/grampobot
 
 Dependencies:
 
-    $ sudo apt-get install lua5.2 lua-sec lua-filesystem inotify-hookable
+    $ sudo apt-get install lua lua-sec lua-filesystem inotify-hookable
     $ git submodule init
     $ git submodule update
     $ wget http://regex.info/code/JSON.lua
