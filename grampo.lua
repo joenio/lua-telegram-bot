@@ -56,7 +56,7 @@ local token = file:read()
 local bot, extension = require("lua-bot-api").configure(token)
 
 function message_to_me(msg)
-  exit_words = {'saia', 'vaza', 'partiu', 'sair', 'licença', 'xô'}
+  exit_words = {'saia', 'vaza', 'partiu', 'sair', 'licença', 'xô', 'fora'}
   for index, word in pairs(exit_words) do
     if string.match(msg.text, word) then
       bot.sendMessage(msg.chat.id, "tchau querida(o)")
