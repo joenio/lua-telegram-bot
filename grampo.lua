@@ -39,6 +39,15 @@ end
 local transcripts = load_transcripts('grampo-transcripts/')
 local melhores_transcripts = dofile('grampo-transcripts/melhores.lua')
 
+-- load keywords
+keywords = dofile('grampo-keywords.lua')
+melhores_keywords = {}
+for index, row in pairs(melhores_transcripts) do
+  for i, keyword in pairs(row.keywords) do
+    melhores_keywords[keyword] = index
+  end
+end
+
 -- read bot token from grampo.token file
 local file = io.open("grampo.token", "r")
 local token = file:read()
@@ -62,14 +71,12 @@ extension.onTextReceive = function (msg)
   if (string.match(msg.text, '^@' .. bot.username .. ' ')) then
     message_to_me(msg)
   else
-    melhores_keywords = {'aécio', 'aecio'}
-    for index, word in pairs(melhores_keywords) do
+    for word, index in pairs(melhores_keywords) do
       if string.match(string.lower(msg.text), word) then
-        bot.sendMessage(msg.chat.id, melhores_transcripts[1][1] .. ': ' .. melhores_transcripts[1][2])
+        bot.sendMessage(msg.chat.id, melhores_transcripts[index][1] .. ': ' .. melhores_transcripts[index][2])
         return
       end
     end
-    keywords = dofile('grampo-keywords.lua')
     for index, word in pairs(keywords) do
       if string.match(string.lower(msg.text), word) then
         math.randomseed(os.time())
